@@ -174,6 +174,9 @@ def usage_demo():
     phrases = comp_detect.detect_key_phrases(sample_text, lang_code)
     print(f"The first {demo_size} are:")
     pprint(phrases[:demo_size])
+    key = phrases[0]
+    print(key['Text'])
+    print(phrases[:demo_size]['Text'])
 
     print("Detecting personally identifiable information (PII).")
     pii_entities = comp_detect.detect_pii(sample_text, lang_code)
@@ -186,10 +189,10 @@ def usage_demo():
     print("SentimentScore:")
     pprint(sentiment['SentimentScore'])
 
-    # print("Detecting syntax elements.")
-    # syntax_tokens = comp_detect.detect_syntax(sample_text, lang_code)
-    # print(f"The first {demo_size} are:")
-    # pprint(syntax_tokens[:demo_size])
+    print("Detecting syntax elements.")
+    syntax_tokens = comp_detect.detect_syntax(sample_text, lang_code)
+    print(f"The first {demo_size} are:")
+    pprint(syntax_tokens[:demo_size])
 
     print("Thanks for watching!")
     print('-'*88)

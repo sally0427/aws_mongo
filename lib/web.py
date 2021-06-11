@@ -7,7 +7,7 @@ from selenium.webdriver.common.keys import Keys
 import re
 import time
 
-url ='https://www.google.com/'
+url ='https://mbasic.facebook.com/'
 
 #今天講個特別的，我們可以不讓瀏覽器執行在前景，而是在背景執行（不讓我們肉眼看得見）
 #如以下宣告 options
@@ -17,11 +17,11 @@ options.add_argument('--incognito')
 
 #打開瀏覽器,確保你已經有chromedriver在你的目錄下
 # 然後將options加入Chrome方法裡面，至於driver請用executable_path宣告進入
-chrome_driver_path = 'D://env//fb//chromedriver.exe'
+chrome_driver_path = '../chromedriver.exe'
 browser = webdriver.Chrome(options = options, executable_path = chrome_driver_path)
 #在瀏覽器打上網址連入
 browser.get(url) 
-# print(browser.title)
+print(browser.title)
 
 #這時候就可以分析網頁裡面的元素
 element = browser.find_element_by_name('q')
