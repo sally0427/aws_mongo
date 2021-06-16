@@ -161,12 +161,7 @@ def usage_demo():
     print("Thanks for watching!")
     print('-'*88)
 
-    # print('-'*88)
-    # print('WS')
-    # text = []
-    # text.append(article_text)
-    # ws(text)
-    # print('-'*88)
+
 
     # print('-'*88)
     # print('gpt')

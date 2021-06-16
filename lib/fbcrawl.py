@@ -11,66 +11,94 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 import time
 import pandas as pd
+# from main import driver
 
+def LoginFB():
+    options = webdriver.ChromeOptions()
+    prefs = {
+        'profile.default_content_setting_values':
+            {
+                'notifications': 2
+            }
+    }
+    options.add_experimental_option('prefs', prefs)
+    options.add_argument("--incognito") 
+    options.add_argument("disable-infobars")
 
-options = webdriver.ChromeOptions()
-prefs = {
-    'profile.default_content_setting_values':
-        {
-            'notifications': 2
-        }
-}
-options.add_experimental_option('prefs', prefs)
-options.add_argument("--incognito") 
-options.add_argument("disable-infobars")
+    # ------ 設定要前往的網址 ------
+    url = 'https://www.facebook.com/'  
+    url = 'https://mbasic.facebook.com/' 
 
-# ------ 設定要前往的網址 ------
-url = 'https://mbasic.facebook.com/' 
-url = 'https://www.facebook.com/'  
+    # ------ 登入的帳號與密碼 ------
+    username = 'a29853602@gmail.com'
+    password = 'sally31613'
 
-# ------ 登入的帳號與密碼 ------
-username = 'a29853602@gmail.com'
-password = 'sally31613'
+    chrome_driver_path = './chromedriver.exe'
+    # ------ 透過Browser Driver 開啟 Chrome ------
+    global driver
+    driver = webdriver.Chrome(options = options, executable_path = chrome_driver_path)
 
-chrome_driver_path = '../chromedriver.exe'
-# ------ 透過Browser Driver 開啟 Chrome ------
-driver = webdriver.Chrome(options = options, executable_path = chrome_driver_path)
+    # ------ 前往該網址 ------
+    driver.get(url)        
+    print(driver.title)
 
-# ------ 前往該網址 ------
-driver.get(url)        
-print(driver.title)
+    # ------ 帳號密碼 ------
+    # time.sleep(1)
+    WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@name="email"]')))
+    elem = driver.find_element_by_name("email")
+    elem.send_keys(username)
 
-# ------ 帳號密碼 ------
-# time.sleep(1)
-WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '//*[@id="email"]')))
-elem = driver.find_element_by_id("email")
-elem.send_keys(username)
+    elem = driver.find_element_by_name("pass")
+    elem.send_keys(password)        
 
-elem = driver.find_element_by_id("pass")
-elem.send_keys(password)        
+    elem.send_keys(Keys.RETURN)
+    time.sleep(1)
 
-elem.send_keys(Keys.RETURN)
-time.sleep(5)
+    # 點下"稍後再說"
+    click=driver.find_element_by_link_text("稍後再說").click()
 
+    # 前往蔡英文粉專
+    elem = driver.find_element_by_name("query")
+    elem.send_keys("蔡英文")   
 
-#檢查有沒有被擋下來
-if len(driver.find_elements_by_xpath("//*[contains(text(), '你的帳號暫時被鎖住')]")) > 0:
-    driver.find_elements_by_xpath("//*[contains(text(), '是')]")[1].click()
+    elem.send_keys(Keys.RETURN)
+    time.sleep(1)
 
-# 切換頁面
-# spec_url = 'https://www.facebook.com/moea.gov.tw'
-# driver.get(spec_url)
+    return driver
 
-# 將網頁元素放入Beautifulsoup
-soup = Soup(driver.page_source,"html.parser")
+def GetArticleText():
+    # 找到第一篇文章
+    heading1 = driver.find_element_by_tag_name('p')
+    # print('heading1:', heading1.text)
 
-soup.find(class_ ='ecm0bbzt hv4rvrfc ihqw7lf3 dati1w0a').text
-# print(soup)
+    #檢查有沒有被擋下來
+    if len(driver.find_elements_by_xpath("//*[contains(text(), '你的帳號暫時被鎖住')]")) > 0:
+        driver.find_elements_by_xpath("//*[contains(text(), '是')]")[1].click()
 
-postime = soup.find(class_ ='oajrlxb2 g5ia77u1 qu0x051f esr5mh6w e9989ue4 r7d6kgcz rq0escxv nhd2j8a9 nc684nl6 p7hjln8o kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x jb3vyjys rz4wbd8a qt6c0cv9 a8nywdso i1ao9s8h esuyzwwr f1sip0of lzcic4wl gmql0nx0 gpro0wi8 b1v8xokw')
-# <a class="oajrlxb2 g5ia77u1 qu0x051f esr5mh6w e9989ue4 r7d6kgcz rq0escxv nhd2j8a9 nc684nl6 p7hjln8o kvgmc6g5 cxmmr5t8 oygrvhab hcukyx3x jb3vyjys rz4wbd8a qt6c0cv9 a8nywdso i1ao9s8h esuyzwwr f1sip0of lzcic4wl gmql0nx0 gpro0wi8 b1v8xokw" href="https://www.facebook.com/hen.zhi.90/posts/4336971842997448?__cft__[0]=AZWL8TWF9anVXBY3pUznI15meWp2lB0UkUwbSrj8uZYQBCb_Ek3yGB21Y6gdGUKsBIFnG-W6qFF2NxHGnBQPV4jS1KptNREYlOKaL9c3pk5B5VWpgYN7NgxW9kRsr_U96STkZeITUtXfGmUHXWRiSm3628pkb7nRH553gur_8RtqXQ&amp;__tn__=%2CO%2CP-R" role="link" tabindex="0">
-# postime.text.strip('=')
-postime.text
-print(postime.text)
-print('b')
+    # 儲存文章成為txt
+    with open('./dataset/article.txt', 'w', encoding='utf-8') as f:
+        f.write(heading1.text)
+    
 
+def GetCommentText():
+    # 找到第一篇文章留言按鈕
+    commentaires = driver.find_elements_by_xpath("//a[@class='ea']")
+    for item in commentaires:
+        # print('item:', item.text)    
+        item.click()
+        break
+
+    # 找到多則留言
+    # WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//div[@class='en']")))
+    time.sleep(1)
+    comments = driver.find_elements_by_class_name('el')
+    comment_list = []
+    for comment in comments:
+        comment_list.append(comment.text)
+        # print('comment:', comment.text)
+   
+    #檢查有沒有被擋下來
+    if len(driver.find_elements_by_xpath("//*[contains(text(), '你的帳號暫時被鎖住')]")) > 0:
+        driver.find_elements_by_xpath("//*[contains(text(), '是')]")[1].click()
+
+    return comment_list

@@ -1,5 +1,15 @@
 from ckip_transformers import __version__
 from ckip_transformers.nlp import CkipWordSegmenter, CkipPosTagger, CkipNerChunker
+import re
+def replace_all_blank(value):
+   """
+   去除value中的所有非字母內容，包括標點符號、空格、換行、下劃線等
+   :param value: 需要處理的內容
+   :return: 返回處理後的內容
+   """
+   # \W 表示匹配非數字字母下劃線
+   result = re.sub('\W+', '', value).replace("_", '')
+   return result
 
 def Word_Segmentation(text):
 
@@ -11,21 +21,17 @@ def Word_Segmentation(text):
    ws_driver  = CkipWordSegmenter(level=3)
 
    # Input text
-#    text = [
-#       '傅達仁今將執行安樂死，卻突然爆出自己20年前遭緯來體育台封殺，他不懂自己哪裡得罪到電視台。',
-#       '美國參議院針對今天總統布什所提名的勞工部長趙小蘭展開認可聽證會，預料她將會很順利通過參議院支持，成為該國有史以來第一位的華裔女性內閣成員。',
-#       '空白 也是可以的～',
-#       '已經退讓了，環團詐騙集團還是會繼續亂吧!尤其是姓潘的，他也使接受日月光模式的協議',
-#    ]
+#    text = []
 
-   print(text)
+   # print(text)
    # Run pipeline
    print('Running pipeline ... WS')
    ws  = ws_driver(text)
 
-   # Show results
-   for sentence, sentence_ws in zip(text, ws):
-      print(sentence)
-      print('------------------------------------------')
-      print(sentence_ws)
-      print()
+   return ws
+   # with open('./dataset/article.txt', 'w', encoding='utf-8') as f:
+   #    for list in ws:
+   #       for item in list:
+   #          # print('item:', item)
+   #          f.write(item)
+   #          f.write(' ')
