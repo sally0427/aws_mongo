@@ -1,5 +1,6 @@
 import logging
 from pprint import pprint
+import re
 import boto3
 from botocore.exceptions import ClientError
 
@@ -9,7 +10,7 @@ import requests
 from lib.scrab import scrab_title
 from lib.ws import Word_Segmentation as ws, replace_all_blank
 from lib.fbcrawl import LoginFB, GetArticleText, GetCommentText
-import os
+import pandas as pd 
 
 def usage_demo():
     LoginFB()
@@ -34,16 +35,10 @@ def usage_demo():
     demo_size = 3
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     comp_detect = ComprehendDetect(boto3.client('comprehend'))
-    # print("Detecting languages.")
     # article_languages = comp_detect.detect_languages(article_text)
-    # print("article_languages:")
-    # pprint( article_languages)
     # article_lang_code = article_languages[0]['LanguageCode']
 
-    # print("Detecting key phrases.")
     # article_phrases = comp_detect.detect_key_phrases(article_text, article_lang_code)
-    # print(f"The first {demo_size} are:")
-    # pprint(article_phrases[:demo_size])
 
     # article_keyWords_list = []
     # with open('./dataset/article_keywords.txt', 'w', encoding='utf-8') as sample_file:
@@ -58,6 +53,7 @@ def usage_demo():
 
     comment_list = GetCommentText()
     for comment_text in comment_list:
+        print('-'*88)
         # 文字前處理
         comment_text = replace_all_blank(comment_text)
         text = []
@@ -71,16 +67,12 @@ def usage_demo():
         comment_lang_code = comment_languages[0]['LanguageCode']
         comment_sentiment = comp_detect.detect_sentiment(comment_text, comment_lang_code )
 
-        if (comment_sentiment['Sentiment']=='POSTIVE'):
+        if (comment_sentiment['Sentiment']=='POSTIVE' or comment_sentiment['Sentiment']=='NEUTRAL'):
             continue
-        print('-'*88)
-        print("comment sentiment is Negative!!!!!!!!!")
         print('comment:', comment_text)
 
         print("Detecting key phrases.")
         comment_phrases = comp_detect.detect_key_phrases(comment_text, comment_lang_code)
-        # print(f"The first {demo_size} are:")
-        # pprint(comment_phrases[:demo_size])
 
         comment_keyWords_list = []
         if len(comment_phrases)<demo_size:
@@ -113,6 +105,7 @@ def usage_demo():
                 pass
 
             result = scrab_title(url, news_keyWords)
+            if result == 0: return 0
             # result = scrab_title(url, keyword[0])
             # print(result)
 
@@ -150,7 +143,7 @@ def usage_demo():
             print('article_keyWords:', article_keyWords)
 
             try:
-                path = './dataset/news_' + str(article_keyWords) + '.txt'
+                path = './dataset/news_' + str(article_keyWords) + '.csv'
                 file = open(path, 'r')
                 print('已有相同檔案，結束爬新聞')
                 continue
@@ -159,7 +152,8 @@ def usage_demo():
                 pass
 
             result = scrab_title(url, article_keyWords)
-            
+            if result == 0: return 0
+
             # choose positive new's title
             idex = 0
             while(idex<2):
@@ -173,10 +167,10 @@ def usage_demo():
 
                 if news_sentiment['Sentiment'] == "POSITIVE":
                     print(result[idex])
-                    path = './dataset/news_' + str(article_keyWords) + '.txt'
-                    with open( path, 'w', encoding='utf-8') as sample_file:
-                        w = "\n".join(result[idex])
-                        sample_file.write(w)
+                    path = './dataset/news_' + str(article_keyWords) + '.csv'
+                    df = pd.DataFrame(result[idex])
+                    print(df)
+                    df.to_csv(path, index=False, header=False, encoding='utf-8-sig') 
 
                 idex = idex +1
 

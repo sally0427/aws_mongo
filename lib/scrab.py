@@ -8,8 +8,11 @@ def scrab_title(url, keyword):
     soup = BeautifulSoup(r.text,"html.parser")
     sel_url = soup.select("div.newsimg-area-info a")
     sel_title = soup.select("div.image-container img")
+    if len(sel_url) == 0 or len(sel_title) == 0:
+        print('搜尋無結果')
+        return 0
+
     result = []
-    
     s_url = []
     s_title = []
     for address in sel_url:

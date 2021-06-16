@@ -82,7 +82,7 @@ def GetArticleText():
 
 def GetCommentText():
     # 找到第一篇文章留言按鈕
-    commentaires = driver.find_elements_by_xpath("//a[@class='ea']")
+    commentaires = driver.find_elements_by_xpath("//a[@class='ed']")
     for item in commentaires:
         # print('item:', item.text)    
         item.click()
