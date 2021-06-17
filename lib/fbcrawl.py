@@ -82,16 +82,12 @@ def GetArticleText():
 
 def GetCommentText():
     # 找到第一篇文章留言按鈕
-    commentaires = driver.find_elements_by_xpath("//a[@class='ed']")
-    for item in commentaires:
-        # print('item:', item.text)    
-        item.click()
-        break
+    heading1 = driver.find_element_by_tag_name('footer').find_element_by_xpath(".//div/a").click()
 
     # 找到多則留言
     # WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//div[@class='en']")))
     time.sleep(1)
-    comments = driver.find_elements_by_class_name('el')
+    comments = driver.find_elements_by_xpath("/html/body/div/div/div/div/div/div/div/div/div/div/div[1]")
     comment_list = []
     for comment in comments:
         comment_list.append(comment.text)

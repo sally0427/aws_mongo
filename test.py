@@ -14,44 +14,47 @@ import pandas as pd
 
 def usage_demo():
     LoginFB()
-    # GetArticleText()
+    GetArticleText()
 
-    # with open('./dataset/article.txt', encoding='utf-8') as sample_file:
-    #     article_text = sample_file.read()
+    with open('./dataset/article.txt', encoding='utf-8') as sample_file:
+        article_text = sample_file.read()
 
-    # article_text = replace_all_blank(article_text)
-    # text = []
-    # text.append(article_text)
-    # article_text = ws(text)
+    article_text = replace_all_blank(article_text)
+    text = []
+    text.append(article_text)
+    article_text = ws(text)
 
-    # with open('./dataset/article.txt', 'w', encoding='utf-8') as f:
-    #     for list in article_text:
-    #         for item in list:
-    #             f.write(item)
-    #             f.write(' ')
-    # with open('./dataset/article.txt', encoding='utf-8') as sample_file:
-    #     article_text = sample_file.read()
+    with open('./dataset/article.txt', 'w', encoding='utf-8') as f:
+        for list in article_text:
+            for item in list:
+                f.write(item)
+                f.write(' ')
+    with open('./dataset/article.txt', encoding='utf-8') as sample_file:
+        article_text = sample_file.read()
 
     demo_size = 3
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     comp_detect = ComprehendDetect(boto3.client('comprehend'))
-    # article_languages = comp_detect.detect_languages(article_text)
-    # article_lang_code = article_languages[0]['LanguageCode']
+    article_languages = comp_detect.detect_languages(article_text)
+    article_lang_code = article_languages[0]['LanguageCode']
 
-    # article_phrases = comp_detect.detect_key_phrases(article_text, article_lang_code)
+    article_phrases = comp_detect.detect_key_phrases(article_text, article_lang_code)
+    print(f"The first {demo_size} are:")
+    pprint(article_phrases[:demo_size])
 
-    # article_keyWords_list = []
-    # with open('./dataset/article_keywords.txt', 'w', encoding='utf-8') as sample_file:
-    #     for item in range(demo_size):
-    #         article_keyWords = article_phrases[item]
-    #         sample_file.write(article_keyWords['Text'])
-    #         sample_file.write(' ')
+    article_keyWords_list = []
+    with open('./dataset/article_keywords.txt', 'w', encoding='utf-8') as sample_file:
+        for item in range(demo_size):
+            article_keyWords = article_phrases[item]
+            sample_file.write(article_keyWords['Text'])
+            sample_file.write(' ')
 
     with open('./dataset/article_keywords.txt', encoding='utf-8') as sample_file:
         article_keyWords_list = sample_file.read().strip().split(" ")
     print('article_keyWords_list:', article_keyWords_list)
 
     comment_list = GetCommentText()
+
     for comment_text in comment_list:
         print('-'*88)
         # 文字前處理
@@ -66,10 +69,10 @@ def usage_demo():
         comment_languages = comp_detect.detect_languages(comment_text)
         comment_lang_code = comment_languages[0]['LanguageCode']
         comment_sentiment = comp_detect.detect_sentiment(comment_text, comment_lang_code )
+        print('comment:', comment_text)
 
         if (comment_sentiment['Sentiment']=='POSTIVE' or comment_sentiment['Sentiment']=='NEUTRAL'):
             continue
-        print('comment:', comment_text)
 
         print("Detecting key phrases.")
         comment_phrases = comp_detect.detect_key_phrases(comment_text, comment_lang_code)
@@ -83,7 +86,8 @@ def usage_demo():
         for item in range(size):
             comment_keyWords = comment_phrases[item]
             comment_keyWords_list.append(comment_keyWords['Text'])
-        print(comment_keyWords_list)        
+        
+        print('comment_keywords:', comment_keyWords_list)        
 
         # find the same article keywords and comment keywords
         keyword = [a for a in article_keyWords_list if a in comment_keyWords_list]
@@ -103,7 +107,6 @@ def usage_demo():
             except:
                 print('沒有相同檔案，繼續爬新聞')
                 pass
-
             result = scrab_title(url, news_keyWords)
             if result == 0: return 0
             # result = scrab_title(url, keyword[0])
@@ -140,7 +143,7 @@ def usage_demo():
             article_keyWords = article_keyWords_list[0]
             for idex in range(1, len(article_keyWords_list)):
                 article_keyWords = article_keyWords + ' ' + article_keyWords_list[idex]
-            print('article_keyWords:', article_keyWords)
+            # print('article_keyWords:', article_keyWords)
 
             try:
                 path = './dataset/news_' + str(article_keyWords) + '.csv'
@@ -153,12 +156,17 @@ def usage_demo():
 
             result = scrab_title(url, article_keyWords)
             if result == 0: return 0
+            
 
             # choose positive new's title
+            if len(result)>30:
+                news_counts = 20
+            elif len(result)<=20:
+                news_counts = len(result)
             idex = 0
-            while(idex<2):
-                news = result[idex][0]
+            while(idex<news_counts):
                 print('-'*10)
+                news = result[idex][0]
                 print('new\'s title:', news)
 
                 news_languages = comp_detect.detect_languages(news)
@@ -169,8 +177,8 @@ def usage_demo():
                     print(result[idex])
                     path = './dataset/news_' + str(article_keyWords) + '.csv'
                     df = pd.DataFrame(result[idex])
-                    print(df)
-                    df.to_csv(path, index=False, header=False, encoding='utf-8-sig') 
+                    df = df.T
+                    df.to_csv(path, mode='a', index=False, header=False, encoding='utf-8-sig') 
 
                 idex = idex +1
 
