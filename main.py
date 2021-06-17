@@ -72,7 +72,7 @@ def usage_demo():
         comment_sentiment = comp_detect.detect_sentiment(comment_text, comment_lang_code )
         print('comment:', comment_text)
 
-        if (comment_sentiment['Sentiment']=='POSTIVE' or comment_sentiment['Sentiment']=='NEUTRAL'):
+        if (comment_sentiment['Sentiment']=='POSITIVE' or comment_sentiment['Sentiment']=='NEUTRAL'):
             continue
 
         print("Detecting key phrases.")

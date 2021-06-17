@@ -13,7 +13,7 @@ import time
 import pandas as pd
 # from main import driver
 
-def LoginFB():
+def LoginFB(fan_page):
     options = webdriver.ChromeOptions()
     prefs = {
         'profile.default_content_setting_values':
@@ -59,7 +59,7 @@ def LoginFB():
 
     # 前往蔡英文粉專
     elem = driver.find_element_by_name("query")
-    elem.send_keys("蔡英文")   
+    elem.send_keys(fan_page)   
 
     elem.send_keys(Keys.RETURN)
     time.sleep(1)
