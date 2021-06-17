@@ -45,8 +45,8 @@ def usage_demo():
     article_lang_code = article_languages[0]['LanguageCode']
 
     article_phrases = comp_detect.detect_key_phrases(article_text, article_lang_code)
-    print(f"The first {demo_size} are:")
-    pprint(article_phrases[:demo_size])
+    # print(f"The first {demo_size} are:")
+    # pprint(article_phrases[:demo_size])
 
     article_keyWords_list = []
     with open('./dataset/article_keywords.txt', 'w', encoding='utf-8') as sample_file:
@@ -79,18 +79,9 @@ def usage_demo():
         print('comment:', comment_text)
 
         if (comment_sentiment['Sentiment']=='POSITIVE' or comment_sentiment['Sentiment']=='NEUTRAL'):
-            continue
+            continue      
 
-        
-        # print('comment_keywords:', comment_keyWords_list)        
-
-        # find the same article keywords and comment keywords
         url = "https://www.setn.com/"
-
-        # didn't have the same article keywords and comment keywords
-        print('-'*10)
-        print("no same key word")
-        print('-'*10)
 
         # scab article keywords
         article_keyWords = article_keyWords_list[0]
