@@ -20,40 +20,40 @@ def usage_demo():
     # print(config.sections())
 
     LoginFB(config['fan_page']['name'])
-    # GetArticleText()
+    GetArticleText()
 
-    # with open('./dataset/article.txt', encoding='utf-8') as sample_file:
-    #     article_text = sample_file.read()
+    with open('./dataset/article.txt', encoding='utf-8') as sample_file:
+        article_text = sample_file.read()
 
-    # article_text = replace_all_blank(article_text)
-    # text = []
-    # text.append(article_text)
-    # article_text = ws(text)
+    article_text = replace_all_blank(article_text)
+    text = []
+    text.append(article_text)
+    article_text = ws(text)
 
-    # with open('./dataset/article.txt', 'w', encoding='utf-8') as f:
-    #     for list in article_text:
-    #         for item in list:
-    #             f.write(item)
-    #             f.write(' ')
-    # with open('./dataset/article.txt', encoding='utf-8') as sample_file:
-    #     article_text = sample_file.read()
+    with open('./dataset/article.txt', 'w', encoding='utf-8') as f:
+        for list in article_text:
+            for item in list:
+                f.write(item)
+                f.write(' ')
+    with open('./dataset/article.txt', encoding='utf-8') as sample_file:
+        article_text = sample_file.read()
 
     demo_size = 3
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     comp_detect = ComprehendDetect(boto3.client('comprehend'))
-    # article_languages = comp_detect.detect_languages(article_text)
-    # article_lang_code = article_languages[0]['LanguageCode']
+    article_languages = comp_detect.detect_languages(article_text)
+    article_lang_code = article_languages[0]['LanguageCode']
 
-    # article_phrases = comp_detect.detect_key_phrases(article_text, article_lang_code)
-    # # print(f"The first {demo_size} are:")
-    # # pprint(article_phrases[:demo_size])
+    article_phrases = comp_detect.detect_key_phrases(article_text, article_lang_code)
+    # print(f"The first {demo_size} are:")
+    # pprint(article_phrases[:demo_size])
 
-    # article_keyWords_list = []
-    # with open('./dataset/article_keywords.txt', 'w', encoding='utf-8') as sample_file:
-    #     for item in range(demo_size):
-    #         article_keyWords = article_phrases[item]
-    #         sample_file.write(article_keyWords['Text'])
-    #         sample_file.write(' ')
+    article_keyWords_list = []
+    with open('./dataset/article_keywords.txt', 'w', encoding='utf-8') as sample_file:
+        for item in range(demo_size):
+            article_keyWords = article_phrases[item]
+            sample_file.write(article_keyWords['Text'])
+            sample_file.write(' ')
 
     with open('./dataset/article_keywords.txt', encoding='utf-8') as sample_file:
         article_keyWords_list = sample_file.read().strip().split(" ")[:1]
@@ -81,118 +81,58 @@ def usage_demo():
         if (comment_sentiment['Sentiment']=='POSITIVE' or comment_sentiment['Sentiment']=='NEUTRAL'):
             continue
 
-        print("Detecting key phrases.")
-        comment_phrases = comp_detect.detect_key_phrases(comment_text, comment_lang_code)
-
-        comment_keyWords_list = []
-        if len(comment_phrases)<demo_size:
-            size=len(comment_phrases) 
-        else: 
-            size=demo_size
-
-        for item in range(size):
-            comment_keyWords = comment_phrases[item]
-            comment_keyWords_list.append(comment_keyWords['Text'])
         
         # print('comment_keywords:', comment_keyWords_list)        
 
         # find the same article keywords and comment keywords
-        keyword = [a for a in article_keyWords_list if a in comment_keyWords_list]
         url = "https://www.setn.com/"
-        if keyword:
-            print('-'*10)
-            print("have same key word")
-            print('-'*10)
-            news_keyWords = keyword[0]
-            for idex in range(1, len(keyword)):
-                news_keyWords = news_keyWords + ' ' + keyword[idex]
-            try:
-                path = './dataset/news_' + str(article_keyWords) + '.txt'
-                file = open(path, 'r')
-                print('已有相同檔案，結束爬新聞')
-                continue
-            except:
-                print('沒有相同檔案，開始爬新聞')
-                pass
-            result = scrab_title(url, news_keyWords)
-            if result == 0: return 0
-            # result = scrab_title(url, keyword[0])
-            # print(result)
 
-            if len(result)>int(config['news_count']['count']):
-                news_counts = int(config['news_count']['count'])
-            elif len(result)<=int(config['news_count']['count']):
-                news_counts = len(result)
-            # choose positive new's title
-            idex = 0
-            while(idex<news_counts):
-                news = result[idex][0]
-                print('-'*10)
-                print('new\'s title:', news)
-
-                news_languages = comp_detect.detect_languages(news)
-                news_lang_code = news_languages[0]['LanguageCode']
-                news_sentiment = comp_detect.detect_sentiment(news, news_lang_code )           
-
-                # if news_sentiment['Sentiment'] == "POSITIVE" or news_sentiment['Sentiment'] == "NEUTRAL":
-                print('news_sentiment:', news_sentiment['Sentiment'] )
-                if news_sentiment['Sentiment'] != "NEGATIVE":
-                    print(result[idex])
-                    path = './dataset/news_' + str(keyword[0]) + '.txt'
-                    print('path = ', path)
-                    with open( path, 'w', encoding='utf-8') as sample_file:
-                        sample_file.write(result[idex])
-
-                idex = idex +1
-                
         # didn't have the same article keywords and comment keywords
-        else:
-            print('-'*10)
-            print("no same key word")
-            print('-'*10)
+        print('-'*10)
+        print("no same key word")
+        print('-'*10)
 
-            # scab article keywords
-            article_keyWords = article_keyWords_list[0]
-            for idex in range(1, len(article_keyWords_list)):
-                article_keyWords = article_keyWords + ' ' + article_keyWords_list[idex]
-            # print('article_keyWords:', article_keyWords)
+        # scab article keywords
+        article_keyWords = article_keyWords_list[0]
+        for idex in range(1, len(article_keyWords_list)):
+            article_keyWords = article_keyWords + ' ' + article_keyWords_list[idex]
+        # print('article_keyWords:', article_keyWords)
 
-            try:
+        try:
+            path = './dataset/news_' + str(article_keyWords) + '.csv'
+            file = open(path, 'r')
+            print('已有相同檔案，結束爬新聞')
+            continue
+        except:
+            print('沒有相同檔案，繼續爬新聞')
+            pass
+
+        result = scrab_title(url, article_keyWords)
+        if result == 0: return 0
+        
+        # choose positive new's title
+        if len(result)>int(config['news_count']['count']):
+            news_counts = int(config['news_count']['count'])
+        elif len(result)<=int(config['news_count']['count']):
+            news_counts = len(result)
+        idex = 0
+        while(idex<news_counts):
+            print('-'*10)
+            news = result[idex][0]
+            print('new\'s title:', news)
+
+            news_languages = comp_detect.detect_languages(news)
+            news_lang_code = news_languages[0]['LanguageCode']
+            news_sentiment = comp_detect.detect_sentiment(news, news_lang_code )       
+            print('news_sentiment:', news_sentiment['Sentiment'] )
+            if news_sentiment['Sentiment'] != "NEGATIVE":
+                print('result:', result[idex])
                 path = './dataset/news_' + str(article_keyWords) + '.csv'
-                file = open(path, 'r')
-                print('已有相同檔案，結束爬新聞')
-                continue
-            except:
-                print('沒有相同檔案，繼續爬新聞')
-                pass
+                df = pd.DataFrame(result[idex])
+                df = df.T
+                df.to_csv(path, mode='a', index=False, header=False, encoding='utf-8-sig') 
 
-            result = scrab_title(url, article_keyWords)
-            if result == 0: return 0
-            
-
-            # choose positive new's title
-            if len(result)>int(config['news_count']['count']):
-                news_counts = int(config['news_count']['count'])
-            elif len(result)<=int(config['news_count']['count']):
-                news_counts = len(result)
-            idex = 0
-            while(idex<news_counts):
-                print('-'*10)
-                news = result[idex][0]
-                print('new\'s title:', news)
-
-                news_languages = comp_detect.detect_languages(news)
-                news_lang_code = news_languages[0]['LanguageCode']
-                news_sentiment = comp_detect.detect_sentiment(news, news_lang_code )       
-                print('news_sentiment:', news_sentiment['Sentiment'] )
-                if news_sentiment['Sentiment'] != "NEGATIVE":
-                    print('result:', result[idex])
-                    path = './dataset/news_' + str(article_keyWords) + '.csv'
-                    df = pd.DataFrame(result[idex])
-                    df = df.T
-                    df.to_csv(path, mode='a', index=False, header=False, encoding='utf-8-sig') 
-
-                idex = idex +1
+            idex = idex +1
 
 if __name__ == '__main__':
     usage_demo()
