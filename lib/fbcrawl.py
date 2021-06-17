@@ -68,8 +68,9 @@ def LoginFB(fan_page):
 
 def GetArticleText():
     # 找到第一篇文章
-    heading1 = driver.find_element_by_tag_name('p')
-    # print('heading1:', heading1.text)
+    # heading1 = driver.find_element_by_tag_name('p')
+    heading1 = driver.find_element_by_tag_name('article').find_element_by_xpath(".//div/div/div/span")
+    print('heading1:', heading1.text)
 
     #檢查有沒有被擋下來
     if len(driver.find_elements_by_xpath("//*[contains(text(), '你的帳號暫時被鎖住')]")) > 0:
@@ -85,7 +86,6 @@ def GetCommentText():
     heading1 = driver.find_element_by_tag_name('footer').find_element_by_xpath(".//div/a").click()
 
     # 找到多則留言
-    # WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "//div[@class='en']")))
     time.sleep(1)
     comments = driver.find_elements_by_xpath("/html/body/div/div/div/div/div/div/div/div/div/div/div[1]")
     comment_list = []

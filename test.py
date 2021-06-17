@@ -45,8 +45,8 @@ def usage_demo():
     article_lang_code = article_languages[0]['LanguageCode']
 
     article_phrases = comp_detect.detect_key_phrases(article_text, article_lang_code)
-    # print(f"The first {demo_size} are:")
-    # pprint(article_phrases[:demo_size])
+    print(f"The first {demo_size} are:")
+    pprint(article_phrases[:demo_size])
 
     article_keyWords_list = []
     with open('./dataset/article_keywords.txt', 'w', encoding='utf-8') as sample_file:
