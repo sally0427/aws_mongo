@@ -59,13 +59,19 @@ def LoginFB(fan_page):
     elem.send_keys(Keys.RETURN)
     time.sleep(1)
 
+    elem = driver.find_element_by_xpath(".//html/body/div/div/div/div/div/div/div/div/div/div/div/div/div/table/tbody/tr/td/a/div/div").click()
+
     return driver
 
 def GetArticleText():
-    # 找到第一篇文章
+    # 找到第一篇文章，點更多檢視完整文章
     # heading1 = driver.find_element_by_tag_name('p')
-    heading1 = driver.find_element_by_tag_name('article').find_element_by_xpath(".//div/div/div/span")
-    # print('heading1:', heading1.text)
+    Article = driver.find_element_by_tag_name('article').find_element_by_xpath(".//div/div/div/span")
+    # Article = driver.find_element_by_tag_name('article').find_element_by_xpath(".//div/div/div/a")
+    # Article.click()
+    # # 點進第一篇文章
+    # Article = Article.find_element_by_xpath(".//html/body/div/div/div/div/div/div/div/div/div/div/div") 
+    # print('Article:', Article.text)
 
     #檢查有沒有被擋下來
     if len(driver.find_elements_by_xpath("//*[contains(text(), '你的帳號暫時被鎖住')]")) > 0:
@@ -73,7 +79,7 @@ def GetArticleText():
 
     # 儲存文章成為txt
     with open('./dataset/article.txt', 'w', encoding='utf-8') as f:
-        f.write(heading1.text)
+        f.write(Article.text)
     
 
 def GetCommentText():

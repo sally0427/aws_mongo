@@ -4,9 +4,9 @@ from pprint import pprint
 import boto3
 from botocore.exceptions import ClientError
 
-from lib.comprehend_detect import ComprehendDetect
 import goto
 # from dominate.tags import label
+from lib.comprehend_detect import ComprehendDetect
 from goto import with_goto
 from lib.scrab import scrab_title
 from lib.ws import Word_Segmentation as ws, replace_all_blank
