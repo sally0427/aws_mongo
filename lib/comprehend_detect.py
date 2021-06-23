@@ -136,5 +136,3 @@ class ComprehendDetect:
             raise
         else:
             return tokens
-
-

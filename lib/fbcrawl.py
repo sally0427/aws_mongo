@@ -1,16 +1,11 @@
 # selenium
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver import DesiredCapabilities
-from selenium.common.exceptions import NoSuchElementException
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from bs4 import BeautifulSoup as Soup
-from selenium.webdriver.common.action_chains import ActionChains
 
 import time
-import pandas as pd
 # from main import driver
 
 def LoginFB(fan_page):

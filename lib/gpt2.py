@@ -2,7 +2,7 @@
 
 def gpt(text):
     from transformers import pipeline
-    from transformers import BertTokenizerFast, AutoModelWithLMHead, BertTokenizer, GPT2LMHeadModel
+    from transformers import BertTokenizer, GPT2LMHeadModel
 
     # tokenizer = BertTokenizerFast.from_pretrained('bert-base-chinese')
     # model = AutoModelWithLMHead.from_pretrained('ckiplab/gpt2-base-chinese')

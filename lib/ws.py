@@ -1,5 +1,5 @@
 from ckip_transformers import __version__
-from ckip_transformers.nlp import CkipWordSegmenter, CkipPosTagger, CkipNerChunker
+from ckip_transformers.nlp import CkipWordSegmenter
 import re
 def replace_all_blank(value):
    """
