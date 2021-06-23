@@ -8,7 +8,7 @@ from selenium.webdriver.common.by import By
 import time
 # from main import driver
 
-def LoginFB(fan_page):
+def LoginFB(email, password, fan_page):
     options = webdriver.ChromeOptions()
     prefs = {
         'profile.default_content_setting_values':
@@ -25,8 +25,8 @@ def LoginFB(fan_page):
     url = 'https://mbasic.facebook.com/' 
 
     # ------ 登入的帳號與密碼 ------
-    username = 'a29853602@gmail.com'
-    password = 'sally31613'
+    username = email
+    password = password
 
     chrome_driver_path = './chromedriver.exe'
     # ------ 透過Browser Driver 開啟 Chrome ------
