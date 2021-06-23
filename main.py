@@ -8,7 +8,6 @@ from lib.comprehend_detect import ComprehendDetect
 import goto
 # from dominate.tags import label
 from goto import with_goto
-import requests
 from lib.scrab import scrab_title
 from lib.ws import Word_Segmentation as ws, replace_all_blank
 from lib.fbcrawl import LoginFB, GetArticleText, GetCommentText
