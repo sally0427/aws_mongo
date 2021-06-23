@@ -21,7 +21,7 @@ def LoginFB(email, password, fan_page):
     options.add_argument("disable-infobars")
 
     # ------ 設定要前往的網址 ------
-    url = 'https://www.facebook.com/'  
+    # url = 'https://www.facebook.com/'  
     url = 'https://mbasic.facebook.com/' 
 
     # ------ 登入的帳號與密碼 ------
@@ -59,7 +59,7 @@ def LoginFB(email, password, fan_page):
     elem.send_keys(Keys.RETURN)
     time.sleep(1)
 
-    elem = driver.find_element_by_xpath(".//html/body/div/div/div/div/div/div/div/div/div/div/div/div/div/table/tbody/tr/td/a/div/div").click()
+    # elem = driver.find_element_by_xpath(".//html/body/div/div/div/div/div/div/div/div/div/div/div/div/div/table/tbody/tr/td/a/div/div").click()
 
     return driver
 
