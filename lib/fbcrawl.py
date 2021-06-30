@@ -91,8 +91,9 @@ def GetCommentText():
     comments = driver.find_elements_by_xpath("/html/body/div/div/div/div/div/div/div/div/div/div/div[1]")
     comment_list = []
     for comment in comments:
+        if comment.text == "": continue
         comment_list.append(comment.text)
-        # print('comment:', comment.text)
+        print('comment:', comment.text)
    
     #檢查有沒有被擋下來
     if len(driver.find_elements_by_xpath("//*[contains(text(), '你的帳號暫時被鎖住')]")) > 0:

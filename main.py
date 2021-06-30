@@ -20,7 +20,7 @@ def usage_demo():
     config = configparser.ConfigParser()
     config.read('config.ini', encoding='utf-8')
 
-    LoginFB(config['facebook_email']['name'], config['facebook_password']['name'], config['fan_page']['name'])
+    LoginFB(config['facebook_user']['email'], config['facebook_user']['password'], config['fan_page']['name'])
     GetArticleText()
 
     with open('./dataset/article.txt', encoding='utf-8') as sample_file:
@@ -71,7 +71,7 @@ def usage_demo():
         path = './dataset/news_' + str(article_keyWords) + '.csv'
         file = open(path, 'r')
         print('已有相同檔案，結束爬新聞')
-        # jump to comment (not yet)
+        # jump to comment
         goto.comment
 
     except:
