@@ -28,7 +28,7 @@ def LoginFB(email, password, fan_page):
     username = email
     password = password
 
-    chrome_driver_path = './chromedriver.exe'
+    chrome_driver_path = './chromedriver'
     # ------ 透過Browser Driver 開啟 Chrome ------
     global driver
     driver = webdriver.Chrome(options = options, executable_path = chrome_driver_path)
