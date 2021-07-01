@@ -80,20 +80,33 @@ def GetArticleText():
     # 儲存文章成為txt
     with open('./dataset/article.txt', 'w', encoding='utf-8') as f:
         f.write(Article.text)
-    
 
-def GetCommentText():
-    # 找到第一篇文章留言按鈕
-    heading1 = driver.find_element_by_tag_name('footer').find_element_by_xpath(".//div/a").click()
-
+def FindComment(comment_list):
     # 找到多則留言
-    time.sleep(1)
     comments = driver.find_elements_by_xpath("/html/body/div/div/div/div/div/div/div/div/div/div/div[1]")
-    comment_list = []
+    # print('-'*10)
     for comment in comments:
         if comment.text == "": continue
         comment_list.append(comment.text)
-        print('comment:', comment.text)
+        # print('comment:', comment.text)  
+  
+
+def GetCommentText(comment_num):
+    # 找到第一篇文章留言按鈕
+    heading1 = driver.find_element_by_tag_name('footer').find_element_by_xpath(".//div/a").click()
+
+    time.sleep(1)
+    
+    comment_list = []
+    FindComment(comment_list)
+    while(comment_num-1):
+      comment_num = comment_num -1
+      # 按下更多留言按鈕
+      more_comments = driver.find_element_by_xpath("/html/body/div/div/div/div/div/div/div/div/div/a[@href]").click()
+      
+      FindComment(comment_list)
+
+    print('num:', len(comment_list))
    
     #檢查有沒有被擋下來
     if len(driver.find_elements_by_xpath("//*[contains(text(), '你的帳號暫時被鎖住')]")) > 0:

@@ -105,7 +105,7 @@ def usage_demo():
         idex = idex +1
 
     label.comment
-    comment_list = GetCommentText()
+    comment_list = GetCommentText(int(config['comment_number']['count']))
     # print('comment_list:', comment_list)
 
     for comment_text in comment_list:
