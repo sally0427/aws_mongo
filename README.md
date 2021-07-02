@@ -7,5 +7,7 @@ pipenv shell
 
 pip install requirements.txt
 
+google-chrome --version
+
 python main.py
 ```
