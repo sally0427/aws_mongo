@@ -83,13 +83,15 @@ def GetArticleText():
 
 def FindComment(comment_list):
     # 找到多則留言
-    comments = driver.find_elements_by_xpath("/html/body/div/div/div/div/div/div/div/div/div/div/div[1]")
-    # print('-'*10)
-    for comment in comments:
+    for comment in driver.find_elements_by_xpath("/html/body/div/div/div/div/div/div/div/div/div/div/div[1]"):
         if comment.text == "": continue
         comment_list.append(comment.text)
         # print('comment:', comment.text)  
-  
+
+def FindName(names_list):
+    for names in driver.find_elements_by_xpath("/html/body/div/div/div/div/div/div/div/div/div/div/h3/a"):
+      if names.text == "": continue
+      names_list.append(names.text)  
 
 def GetCommentText(comment_num):
     # 找到第一篇文章留言按鈕
@@ -97,19 +99,25 @@ def GetCommentText(comment_num):
 
     time.sleep(1)
     
+    # 找第一頁留言帳號
+    names_list = []
+    FindName(names_list)
+      
+    # 找第一頁留言
     comment_list = []
     FindComment(comment_list)
+    
     while(comment_num-1):
       comment_num = comment_num -1
       # 按下更多留言按鈕
       more_comments = driver.find_element_by_xpath("/html/body/div/div/div/div/div/div/div/div/div/a[@href]").click()
-      
+      FindName(names_list)
       FindComment(comment_list)
 
-    print('num:', len(comment_list))
+    # print('num:', len(comment_list))
    
     #檢查有沒有被擋下來
     if len(driver.find_elements_by_xpath("//*[contains(text(), '你的帳號暫時被鎖住')]")) > 0:
         driver.find_elements_by_xpath("//*[contains(text(), '是')]")[1].click()
 
-    return comment_list
+    return names_list, comment_list

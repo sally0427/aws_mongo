@@ -105,10 +105,11 @@ def usage_demo():
         idex = idex +1
 
     label.comment
-    comment_list = GetCommentText(int(config['comment_number']['count']))
-    # print('comment_list:', comment_list)
+    name_list, comment_list = GetCommentText(int(config['comment_number']['count']))
+    # print('name_list:', name_list)
+    
 
-    for comment_text in comment_list:
+    for index, comment_text in enumerate(comment_list):
         print('-'*88)
         # 文字前處理
         comment_text = replace_all_blank(comment_text)
@@ -125,11 +126,13 @@ def usage_demo():
         if (comment_sentiment['Sentiment']=='POSITIVE' or comment_sentiment['Sentiment']=='NEUTRAL'):
             continue
 
-        print('comment:', comment_text)
+        print(name_list[index], ' :', comment_text)
         comment = []
         path = './dataset/comments_' + str(article_keyWords) + '.csv'
+        comment.append(name_list[index])
         comment.append(comment_text)
         df = pd.DataFrame(comment)
+        df = df.T
         df.to_csv(path, mode='a', index=False, header=False, encoding='utf-8-sig')         
 
 
