@@ -5,7 +5,7 @@ git clone https://github.com/sally0427/fb.git -b linux_aws
 
 pipenv shell 
 
-pip install requirements.txt
+pip install -r requirements.txt
 
 # 下載google-chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
