@@ -33,6 +33,10 @@ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip
 unzip awscliv2.zip
 sudo ./aws/install
 
+# 設定aws(輸入 Access KeyID, Secret access key, region name, ap-southeast-1)
+aws configure
+
+
 # 執行程式
 python main.py
 
