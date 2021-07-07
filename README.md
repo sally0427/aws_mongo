@@ -7,7 +7,7 @@ pipenv shell
 
 pip install -r requirements.txt
 
-# 下載google-chrome
+# 下載google-chrome(github已經有安裝黨，若git clone下來的，可直接跳下一步)
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
 # 安裝google-chrome
