@@ -27,7 +27,7 @@ chromeDriver
 #若chromedriver not found，給權限
 chmod +x chromedriver
 
-# 安裝aws CLI(github已經有安裝檔，若git clone下來的，可直接跳下一步)
+# 安裝aws CLI(github已經有安裝檔，若git clone下來的，可直接跳下兩行)
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
