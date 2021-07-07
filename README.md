@@ -22,13 +22,12 @@ google-chrome --version
 
 # 確認chromedriver版本(資料夾內附 91.0.4472.101 版)
 chromeDriver
-
-#若版本不合去下載合適版本
+**若版本不合去下載合適版本**
 
 #若chromedriver not found，給權限
 chmod +x chromedriver
 
-# 安裝aws CLI
+# 安裝aws CLI(github已經有安裝檔，若git clone下來的，可直接跳下一步)
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
@@ -39,5 +38,4 @@ aws configure
 
 # 執行程式
 python main.py
-
 ```
