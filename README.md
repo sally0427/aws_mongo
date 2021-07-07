@@ -28,7 +28,7 @@ chromeDriver
 #若chromedriver not found，給權限
 chmod +x chromedriver
 
-# 安裝最新版本aws CLI
+# 安裝aws CLI
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 unzip awscliv2.zip
 sudo ./aws/install
