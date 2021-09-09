@@ -1,4 +1,4 @@
-# aws
+# linux_aws
 1.
 ```bash
 git clone https://github.com/sally0427/fb.git -b linux_aws
@@ -41,3 +41,5 @@ aws configure
 # 執行程式
 python main.py
 ```
+2.error
+comp_detect = ComprehendDetect(boto3.client('comprehend'))
