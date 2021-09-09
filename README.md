@@ -42,4 +42,7 @@ aws configure
 python main.py
 ```
 2.error
+```
+# 尚未設定aws config
 comp_detect = ComprehendDetect(boto3.client('comprehend'))
+```
