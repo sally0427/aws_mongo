@@ -27,6 +27,7 @@ def usage_demo():
         article_text = sample_file.read()
 
     article_text = replace_all_blank(article_text)
+    article_text = (article_text[:200]) if len(article_text) > 200 else article_text
     text = []
     text.append(article_text)
     article_text = ws(text)
@@ -113,6 +114,7 @@ def usage_demo():
         print('-'*88)
         # 文字前處理
         comment_text = replace_all_blank(comment_text)
+        comment_text = (comment_text[:200]) if len(comment_text) > 200 else comment_text
         text = []
         text.append(comment_text)
         comment_text = ws(text)
@@ -122,7 +124,7 @@ def usage_demo():
         comment_languages = comp_detect.detect_languages(comment_text)
         comment_lang_code = comment_languages[0]['LanguageCode']
         comment_sentiment = comp_detect.detect_sentiment(comment_text, comment_lang_code )
-
+        print(comment_sentiment)
         if (comment_sentiment['Sentiment']=='POSITIVE' or comment_sentiment['Sentiment']=='NEUTRAL'):
             continue
 
